@@ -19,7 +19,7 @@ RTSP_ENABLED=$(/usr/local/bin/extended-config.py "$EXTENDED_CFG" camera rtsp fal
 
 CMD_CAPTURE="/usr/local/bin/capture-v4l2-raw-mpp --device /dev/video11 --format nv12 --jpeg-quality 7 --jpeg-sock /tmp/capture-mipi-jpeg.sock --mjpeg-sock /tmp/capture-mipi-mjpeg.sock --h264-sock /tmp/capture-mipi-h264.sock --raw-frame-sock /tmp/capture-mipi-raw.sock --width 1920 --height 1080 --fps 30"
 
-CMD_WEBRTC="/usr/local/bin/stream-webrtc --h264-sock /tmp/capture-mipi-h264.sock --webrtc-sock /tmp/capture-mipi-webrtc.sock"
+CMD_WEBRTC="/usr/local/bin/stream-webrtc --h264-sock /tmp/capture-mipi-h264.sock --webrtc-sock /tmp/capture-mipi-webrtc.sock --stun stun:stunserver2025.stunprotocol.org:3478"
 
 CMD_HTTP="/usr/bin/python3 /usr/local/bin/stream-http.py --jpeg-sock /tmp/capture-mipi-jpeg.sock --mjpeg-sock /tmp/capture-mipi-mjpeg.sock --h264-sock /tmp/capture-mipi-h264.sock --webrtc-sock /tmp/capture-mipi-webrtc.sock --control-sock /tmp/v4l2-control-mipi.sock --bind 127.0.0.1"
 
@@ -103,21 +103,21 @@ stop() {
 }
 
 case "$1" in
-    start)
-        start
-        ;;
-    stop)
-        stop
-        ;;
-    restart|reload)
-        stop
-        sleep 1
-        start
-        ;;
-    *)
-        echo "Usage: $0 {start|stop|restart}"
-        exit 1
-        ;;
+start)
+    start
+    ;;
+stop)
+    stop
+    ;;
+restart | reload)
+    stop
+    sleep 1
+    start
+    ;;
+*)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+    ;;
 esac
 
 exit 0
